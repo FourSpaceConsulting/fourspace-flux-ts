@@ -81,7 +81,7 @@ export class PayloadDispatcher<T> implements Dispatcher<T> {
    */
   private _startDispatching(payload: T) {
     if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug('Dispatching', payload);
+      LOGGER.debug('Dispatching', JSON.stringify(payload));
     }
     // tslint:disable-next-line:forin
     for (const id in this._callbacks) {

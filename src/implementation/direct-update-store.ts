@@ -17,13 +17,13 @@ export abstract class DirectUpdateStore<R, T, D> implements UpdatableStore<R, T,
 
   public updateStore(payload: R): void {
     if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug(this._storeName + ': Received payload' + JSON.stringify(payload));
+      LOGGER.debug(this._storeName + ': Received payload ' + JSON.stringify(payload));
     }
     if (this.doHandle(payload)) {
       const changeEvent: T = this.generateChange(payload);
       if (changeEvent != null) {
         if (LOGGER.isDebugEnabled()) {
-          LOGGER.debug(this._storeName + ': Emitting change');
+          LOGGER.debug(this._storeName + ': Emitting change ' + JSON.stringify(changeEvent));
         }
         this.emitChange(changeEvent);
       } else {
