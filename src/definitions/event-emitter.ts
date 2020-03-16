@@ -1,5 +1,5 @@
 ﻿import { Disposable } from './disposable';
-import { EventConsumer } from './event-consumer';
+import { EventConsumer } from './consumer';
 
 /**
  * @param <T> event type

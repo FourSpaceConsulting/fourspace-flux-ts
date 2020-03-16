@@ -1,18 +1,17 @@
 ﻿import { LogFactory, Logger } from 'fourspace-logger-ts';
-import { Dispatcher } from '../definitions/dispatcher';
+import { SubscribableDispatcher } from '../definitions/dispatcher';
 import { DispatcherStore } from '../definitions/dispatcher-store';
-import { EventEmitter } from '../definitions/event-emitter';
-import { DirectUpdateStore } from './direct-update-store';
+import { Emitter } from '../definitions/emitter';
+import { AbstractUpdateStore } from './abstract-update-store';
 
 const LOGGER: Logger = LogFactory.getLogger('dispatcher-store');
 
-export abstract class DispatcherUpdateStore<P, E, D> extends DirectUpdateStore<P, E, D>
-  implements DispatcherStore<E, D> {
-  private readonly _dispatcher: Dispatcher<P>;
+export abstract class AbstractDispatcherStore<P, D> extends AbstractUpdateStore<P, D> implements DispatcherStore<D> {
+  private readonly _dispatcher: SubscribableDispatcher<P>;
   private readonly _dispatcherToken: string = '';
 
-  constructor(storeName: string, dispatcher: Dispatcher<P>, eventEmitter: EventEmitter<E>) {
-    super(storeName, eventEmitter);
+  constructor(storeName: string, dispatcher: SubscribableDispatcher<P>, emitter: Emitter) {
+    super(storeName, emitter);
     this._dispatcher = dispatcher;
     // Register event handler with dispatcher
     if (this._dispatcher != null)
@@ -22,8 +21,8 @@ export abstract class DispatcherUpdateStore<P, E, D> extends DirectUpdateStore<P
   }
 
   // Abstract methods
-  public abstract getStoreData(): D;
-  public abstract generateChange(payload: P): E;
+  public abstract getData(): D;
+  public abstract generateChange(payload: P): boolean;
   public abstract doHandle(payload: P): boolean;
 
   // Dispatcher

@@ -1,9 +1,9 @@
 ﻿import { LogFactory, Logger } from 'fourspace-logger-ts';
-import { Dispatcher } from '../definitions/dispatcher';
+import { SubscribableDispatcher } from '../definitions/dispatcher';
 
 const LOGGER: Logger = LogFactory.getLogger('dispatcher');
 
-export class PayloadDispatcher<T> implements Dispatcher<T> {
+export class DispatcherImpl<T> implements SubscribableDispatcher<T> {
   private static readonly _prefix: string = 'DID_';
 
   private _callbacks: { [key: string]: (payload: T) => void };
@@ -23,7 +23,7 @@ export class PayloadDispatcher<T> implements Dispatcher<T> {
   }
 
   public register(callback: (payload: T) => void): string {
-    const id = PayloadDispatcher._prefix + this._lastId++;
+    const id = DispatcherImpl._prefix + this._lastId++;
     this._callbacks[id] = callback;
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug('Registering dispatch id ' + id);

@@ -2,6 +2,13 @@
  * Payload dispatcher
  */
 export interface Dispatcher<T> {
+  dispatch(payload: T): void;
+}
+
+/**
+ * Subscribable payload dispatcher
+ */
+export interface SubscribableDispatcher<T> extends Dispatcher<T> {
   /**
    * @param callback callback function
    * @returns id for unregistering
@@ -12,12 +19,6 @@ export interface Dispatcher<T> {
    * @param id id to unregister
    */
   unregister(id: string): void;
-
-  /**
-   * Dispatch a payload
-   * @param payload
-   */
-  dispatch(payload: T): void;
 
   /**
    * Waits for the callbacks specified to be invoked before continuing execution

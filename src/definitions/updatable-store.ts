@@ -1,5 +1,9 @@
-﻿import { Store } from './store';
+﻿import { FluxStore } from './flux-store';
 
-export interface UpdatableStore<P, E, D> extends Store<E, D> {
+/**
+ * @param <P> Payload
+ * @param <T> Data
+ */
+export interface UpdatableStore<P, T> extends FluxStore<T> {
   updateStore(payload: P): void;
 }

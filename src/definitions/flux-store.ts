@@ -1,28 +1,27 @@
 ﻿import { Disposable } from './disposable';
-import { EventConsumer } from './event-consumer';
+import { Consumer } from './consumer';
 
 /**
  * Data store
  * returns data and allows register/unregister of event consumer
- * @param <E> event type
  * @param <T> data type
  */
-export interface Store<E, T> {
+export interface FluxStore<T> {
   /**
    * Returns store data
    */
-  getStoreData(): T;
+  getData(): T;
 
   /**
    * add a change listener
    * @param consumer consumer
    * @returns disposable object which removes listener
    */
-  addChangeListener(consumer: EventConsumer<E>): Disposable;
+  subscribe(consumer: Consumer): Disposable;
 
   /**
    * removes the change listener
    * @param consumer consumer to remove
    */
-  removeChangeListener(consumer: EventConsumer<E>): void;
+  unsubscribe(consumer: Consumer): void;
 }

@@ -1,10 +1,10 @@
-﻿import { Dispatcher } from '../definitions/dispatcher';
+﻿import { SubscribableDispatcher } from '../definitions/dispatcher';
 
 export abstract class DispatcherListener<P> {
-  private readonly _dispatcher: Dispatcher<P>;
+  private readonly _dispatcher: SubscribableDispatcher<P>;
   private readonly _dispatcherToken: string;
 
-  constructor(dispatcher: Dispatcher<P>) {
+  constructor(dispatcher: SubscribableDispatcher<P>) {
     this._dispatcher = dispatcher;
     // Register event handler with dispatcher
     this._dispatcherToken = this._dispatcher.register((payload: P) => this.receivePayload(payload));

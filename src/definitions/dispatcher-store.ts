@@ -1,5 +1,5 @@
-﻿import { Store } from './store';
+﻿import { FluxStore } from './flux-store';
 
-export interface DispatcherStore<E, D> extends Store<E, D> {
+export interface DispatcherStore<D> extends FluxStore<D> {
   unregisterFromDispatcher(): void;
 }

@@ -1,8 +1,8 @@
 ﻿import { Disposable } from '../definitions/disposable';
 import { EventEmitter } from '../definitions/event-emitter';
-import { EventConsumer } from '../definitions/event-consumer';
+import { EventConsumer } from '../definitions/consumer';
 
-export class EmitAllEventEmitter<T> implements EventEmitter<T> {
+export class EventEmitterImpl<T> implements EventEmitter<T> {
   private listeners: EventConsumer<T>[] = [];
   private oneTimeListeners: EventConsumer<T>[] = [];
 
