@@ -1,16 +1,14 @@
-﻿import { Disposable } from '../definitions/disposable';
-import { Consumer } from '../definitions/consumer';
+﻿import { Consumer } from '../definitions/consumer';
 import { Emitter, EmitterOnce } from '../definitions/emitter';
+import { Unsubscribe } from '../definitions/unsubscribe';
 
 export class EmitterOnceImpl implements EmitterOnce {
   private listeners: Consumer[] = [];
   private oneTimeListeners: Consumer[] = [];
 
-  on(listener: Consumer): Disposable {
+  on(listener: Consumer): Unsubscribe {
     this.listeners.push(listener);
-    return {
-      dispose: () => this.off(listener),
-    };
+    return () => this.off(listener);
   }
 
   once(listener: Consumer): void {
@@ -31,7 +29,7 @@ export class EmitterOnceImpl implements EmitterOnce {
     this.oneTimeListeners = [];
   }
 
-  pipe(te: Emitter): Disposable {
+  pipe(te: Emitter): Unsubscribe {
     return this.on(() => te.emit());
   }
 }
