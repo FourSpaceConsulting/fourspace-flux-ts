@@ -1,6 +1,7 @@
 import { EmitterOnceImpl } from './implementation/emitter-once-impl';
 // definitions
 export { Disposable } from './definitions/disposable';
+export { Unsubscribe } from './definitions/unsubscribe';
 export { Dispatcher, SubscribableDispatcher } from './definitions/dispatcher';
 
 export { Emitter, EmitterOnce } from './definitions/emitter';

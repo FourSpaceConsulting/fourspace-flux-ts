@@ -1,15 +1,13 @@
-﻿import { Disposable } from '../definitions/disposable';
-import { Consumer } from '../definitions/consumer';
+﻿import { Consumer } from '../definitions/consumer';
 import { Emitter } from '../definitions/emitter';
+import { Unsubscribe } from '../definitions/unsubscribe';
 
 export class EmitterImpl implements Emitter {
   private listeners: Consumer[] = [];
 
-  on(listener: Consumer): Disposable {
+  on(listener: Consumer): Unsubscribe {
     this.listeners.push(listener);
-    return {
-      dispose: () => this.off(listener),
-    };
+    return () => this.off(listener);
   }
 
   off(listener: Consumer) {
@@ -22,7 +20,7 @@ export class EmitterImpl implements Emitter {
     this.listeners.forEach(listener => listener());
   }
 
-  pipe(te: Emitter): Disposable {
+  pipe(te: Emitter): Unsubscribe {
     return this.on(() => te.emit());
   }
 }

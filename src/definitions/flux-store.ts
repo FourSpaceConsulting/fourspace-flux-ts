@@ -1,5 +1,5 @@
-﻿import { Disposable } from './disposable';
-import { Consumer } from './consumer';
+﻿import { Consumer } from './consumer';
+import { Unsubscribe } from './unsubscribe';
 
 /**
  * Data store
@@ -7,21 +7,17 @@ import { Consumer } from './consumer';
  * @param <T> data type
  */
 export interface FluxStore<T> {
+
   /**
-   * Returns store data
+   * Returns store state
    */
-  getData(): T;
+  getState(): T;
 
   /**
    * add a change listener
    * @param consumer consumer
-   * @returns disposable object which removes listener
+   * @returns function to remove listener
    */
-  subscribe(consumer: Consumer): Disposable;
+  subscribe(consumer: Consumer): Unsubscribe;
 
-  /**
-   * removes the change listener
-   * @param consumer consumer to remove
-   */
-  unsubscribe(consumer: Consumer): void;
 }

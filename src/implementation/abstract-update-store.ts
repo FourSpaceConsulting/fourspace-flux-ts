@@ -1,8 +1,8 @@
 ﻿import { LogFactory, Logger } from 'fourspace-logger-ts';
 import { UpdatableStore } from '../definitions/updatable-store';
 import { Emitter } from '../definitions/emitter';
-import { Disposable } from '../definitions/disposable';
 import { Consumer } from '../definitions/consumer';
+import { Unsubscribe } from '../definitions/unsubscribe';
 
 const LOGGER: Logger = LogFactory.getLogger('direct-update-store');
 
@@ -41,7 +41,7 @@ export abstract class AbstractUpdateStore<P, D> implements UpdatableStore<P, D> 
   protected emitChange(): void {
     this._emitter.emit();
   }
-  public subscribe(callback: Consumer): Disposable {
+  public subscribe(callback: Consumer): Unsubscribe {
     return this._emitter.on(callback);
   }
   public unsubscribe(callback: Consumer) {

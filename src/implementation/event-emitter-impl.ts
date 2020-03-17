@@ -1,16 +1,14 @@
-﻿import { Disposable } from '../definitions/disposable';
-import { EventEmitter } from '../definitions/event-emitter';
+﻿import { EventEmitter } from '../definitions/event-emitter';
 import { EventConsumer } from '../definitions/consumer';
+import { Unsubscribe } from '../definitions/unsubscribe';
 
 export class EventEmitterImpl<T> implements EventEmitter<T> {
   private listeners: EventConsumer<T>[] = [];
   private oneTimeListeners: EventConsumer<T>[] = [];
 
-  on(listener: EventConsumer<T>): Disposable {
+  on(listener: EventConsumer<T>): Unsubscribe {
     this.listeners.push(listener);
-    return {
-      dispose: () => this.off(listener),
-    };
+    return () => this.off(listener);
   }
 
   once(listener: EventConsumer<T>): void {
@@ -31,7 +29,7 @@ export class EventEmitterImpl<T> implements EventEmitter<T> {
     this.oneTimeListeners = [];
   }
 
-  pipe(te: EventEmitter<T>): Disposable {
+  pipe(te: EventEmitter<T>): Unsubscribe {
     return this.on(e => te.emit(e));
   }
 }

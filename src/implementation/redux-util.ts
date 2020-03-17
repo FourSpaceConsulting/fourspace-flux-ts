@@ -1,11 +1,11 @@
 ﻿import { EmitterImpl } from './emitter-impl';
 import { FluxStore } from '../definitions/flux-store';
-import { Disposable } from '../definitions/disposable';
 import { Consumer } from '../definitions/consumer';
+import { Unsubscribe } from '../definitions/unsubscribe';
 
 interface ReduxStore<S> {
   getState(): S;
-  subscribe(c: () => void): () => void;
+  subscribe(c: Consumer): Unsubscribe;
 }
 
 export function reduxAdaptor<T, R>(store: ReduxStore<T>, sliceSelector: (t: T) => R): FluxStore<R> {
@@ -24,11 +24,8 @@ export function reduxAdaptor<T, R>(store: ReduxStore<T>, sliceSelector: (t: T) =
   store.subscribe(handleChange);
   // return flux store
   return {
-    subscribe: (callback: Consumer): Disposable => {
+    subscribe: (callback: Consumer): Unsubscribe => {
       return emitter.on(callback);
-    },
-    unsubscribe: (callback: Consumer) => {
-      emitter.off(callback);
     },
     getData: (): R => {
       return currentSlice;
