@@ -3,12 +3,12 @@ import { FluxStore } from '../definitions/flux-store';
 import { Disposable } from '../definitions/disposable';
 import { Consumer } from '../definitions/consumer';
 
-interface ReduxStore {
-  getState(): any;
-  subscribe(c: any): () => void;
+interface ReduxStore<S> {
+  getState(): S;
+  subscribe(c: () => void): () => void;
 }
 
-export function reduxAdaptor<T, R>(store: ReduxStore, sliceSelector: (t: T) => R): FluxStore<R> {
+export function reduxAdaptor<T, R>(store: ReduxStore<T>, sliceSelector: (t: T) => R): FluxStore<R> {
   const emitter = new EmitterImpl();
   let currentSlice: R;
   // function to handle changes from redux store
@@ -19,7 +19,8 @@ export function reduxAdaptor<T, R>(store: ReduxStore, sliceSelector: (t: T) => R
       emitter.emit();
     }
   }
-  // subscribe to change
+  // subscribe to change and call first time
+  handleChange();
   store.subscribe(handleChange);
   // return flux store
   return {
