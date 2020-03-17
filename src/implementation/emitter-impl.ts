@@ -5,6 +5,10 @@ import { Unsubscribe } from '../definitions/unsubscribe';
 export class EmitterImpl implements Emitter {
   private listeners: Consumer[] = [];
 
+  allOff(): void {
+    this.listeners = [];
+  }
+
   on(listener: Consumer): Unsubscribe {
     this.listeners.push(listener);
     return () => this.off(listener);

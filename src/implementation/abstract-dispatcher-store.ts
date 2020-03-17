@@ -3,10 +3,12 @@ import { SubscribableDispatcher } from '../definitions/dispatcher';
 import { DispatcherStore } from '../definitions/dispatcher-store';
 import { Emitter } from '../definitions/emitter';
 import { AbstractUpdateStore } from './abstract-update-store';
+import { DisposableFluxStore } from '../definitions/flux-store';
 
 const LOGGER: Logger = LogFactory.getLogger('dispatcher-store');
 
-export abstract class AbstractDispatcherStore<P, D> extends AbstractUpdateStore<P, D> implements DispatcherStore<D> {
+export abstract class AbstractDispatcherStore<P, D> extends AbstractUpdateStore<P, D>
+  implements DispatcherStore<D>, DisposableFluxStore<D> {
   private readonly _dispatcher: SubscribableDispatcher<P>;
   private readonly _dispatcherToken: string = '';
 
@@ -19,7 +21,6 @@ export abstract class AbstractDispatcherStore<P, D> extends AbstractUpdateStore<
         this.updateStore(payload);
       });
   }
-
   // Abstract methods
   public abstract getState(): D;
   public abstract generateChange(payload: P): boolean;
@@ -28,5 +29,8 @@ export abstract class AbstractDispatcherStore<P, D> extends AbstractUpdateStore<
   // Dispatcher
   public unregisterFromDispatcher(): void {
     if (this._dispatcher != null) this._dispatcher.unregister(this._dispatcherToken);
+  }
+  public dispose(): void {
+    this.unregisterFromDispatcher();
   }
 }

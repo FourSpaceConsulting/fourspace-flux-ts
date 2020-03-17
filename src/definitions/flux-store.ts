@@ -1,5 +1,6 @@
 ﻿import { Consumer } from './consumer';
 import { Unsubscribe } from './unsubscribe';
+import { Disposable } from './disposable';
 
 /**
  * Data store
@@ -19,3 +20,5 @@ export interface FluxStore<T> {
    */
   subscribe(consumer: Consumer): Unsubscribe;
 }
+
+export interface DisposableFluxStore<T> extends FluxStore<T>, Disposable {}

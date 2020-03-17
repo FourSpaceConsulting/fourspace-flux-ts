@@ -1,16 +1,18 @@
 ﻿import { EmitterImpl } from './emitter-impl';
-import { FluxStore } from '../definitions/flux-store';
+import { DisposableFluxStore } from '../definitions/flux-store';
 import { Consumer } from '../definitions/consumer';
 import { Unsubscribe } from '../definitions/unsubscribe';
 
+// this is the signature, so we don't need to import redux to project
 interface ReduxStore<S> {
   getState(): S;
   subscribe(c: Consumer): Unsubscribe;
 }
 
-export function reduxAdaptor<T, R>(store: ReduxStore<T>, sliceSelector: (t: T) => R): FluxStore<R> {
+export function reduxAdaptor<T, R>(store: ReduxStore<T>, sliceSelector: (t: T) => R): DisposableFluxStore<R> {
   const emitter = new EmitterImpl();
-  let currentSlice: R;
+  let disposed = false;
+  let currentSlice: R = sliceSelector(store.getState());
   // function to handle changes from redux store
   function handleChange() {
     const nextSlice = sliceSelector(store.getState());
@@ -19,16 +21,22 @@ export function reduxAdaptor<T, R>(store: ReduxStore<T>, sliceSelector: (t: T) =
       emitter.emit();
     }
   }
-  // subscribe to change and call first time
-  handleChange();
-  store.subscribe(handleChange);
+  // subscribe to change
+  const unsubscribe = store.subscribe(handleChange);
   // return flux store
   return {
     subscribe: (callback: Consumer): Unsubscribe => {
+      if (disposed) throw new Error('Store is disposed');
       return emitter.on(callback);
     },
     getState: (): R => {
+      if (disposed) throw new Error('Store is disposed');
       return currentSlice;
+    },
+    dispose: (): void => {
+      disposed = true;
+      emitter.allOff();
+      unsubscribe();
     },
   };
 }
