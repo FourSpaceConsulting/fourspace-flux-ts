@@ -21,7 +21,7 @@ export abstract class AbstractDispatcherStore<P, D> extends AbstractUpdateStore<
   }
 
   // Abstract methods
-  public abstract getData(): D;
+  public abstract getState(): D;
   public abstract generateChange(payload: P): boolean;
   public abstract doHandle(payload: P): boolean;
 

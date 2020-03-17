@@ -33,7 +33,7 @@ export abstract class AbstractUpdateStore<P, D> implements UpdatableStore<P, D> 
   }
 
   // Abstract methods
-  public abstract getData(): D;
+  public abstract getState(): D;
   protected abstract generateChange(payload: P): boolean;
   protected abstract doHandle(payload: P): boolean;
 

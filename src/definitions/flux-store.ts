@@ -7,7 +7,6 @@ import { Unsubscribe } from './unsubscribe';
  * @param <T> data type
  */
 export interface FluxStore<T> {
-
   /**
    * Returns store state
    */
@@ -19,5 +18,4 @@ export interface FluxStore<T> {
    * @returns function to remove listener
    */
   subscribe(consumer: Consumer): Unsubscribe;
-
 }

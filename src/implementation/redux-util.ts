@@ -27,7 +27,7 @@ export function reduxAdaptor<T, R>(store: ReduxStore<T>, sliceSelector: (t: T) =
     subscribe: (callback: Consumer): Unsubscribe => {
       return emitter.on(callback);
     },
-    getData: (): R => {
+    getState: (): R => {
       return currentSlice;
     },
   };
